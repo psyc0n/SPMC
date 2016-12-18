@@ -44,8 +44,6 @@ CJNIXBMCVideoView* find_videoview(const jhobject& o)
     if (it->first == o)
       return it->second;
   }
-  // Can never get here!!
-  assert(false);
   return nullptr;
 }
 
@@ -105,7 +103,8 @@ void CJNIXBMCVideoView::_OnSurfaceChanged(JNIEnv *env, jobject thiz, jobject hol
   (void)env;
 
   CJNIXBMCVideoView *inst = find_videoview(jhobject(thiz));
-  inst->OnSurfaceChanged(CJNISurfaceHolder(jhobject(holder)), format, width, height);
+  if (inst)
+    inst->OnSurfaceChanged(CJNISurfaceHolder(jhobject(holder)), format, width, height);
 }
 
 void CJNIXBMCVideoView::_OnSurfaceCreated(JNIEnv* env, jobject thiz, jobject holder)
@@ -113,7 +112,8 @@ void CJNIXBMCVideoView::_OnSurfaceCreated(JNIEnv* env, jobject thiz, jobject hol
   (void)env;
 
   CJNIXBMCVideoView *inst = find_videoview(jhobject(thiz));
-  inst->OnSurfaceCreated(CJNISurfaceHolder(jhobject(holder)));
+  if (inst)
+    inst->OnSurfaceCreated(CJNISurfaceHolder(jhobject(holder)));
 }
 
 void CJNIXBMCVideoView::_OnSurfaceDestroyed(JNIEnv* env, jobject thiz, jobject holder)
@@ -121,7 +121,8 @@ void CJNIXBMCVideoView::_OnSurfaceDestroyed(JNIEnv* env, jobject thiz, jobject h
   (void)env;
 
   CJNIXBMCVideoView *inst = find_videoview(jhobject(thiz));
-  inst->OnSurfaceDestroyed(CJNISurfaceHolder(jhobject(holder)));
+  if (inst)
+    inst->OnSurfaceDestroyed(CJNISurfaceHolder(jhobject(holder)));
 }
 
 void CJNIXBMCVideoView::OnSurfaceChanged(CJNISurfaceHolder holder, int format, int width, int height)
