@@ -79,15 +79,15 @@ CJNIXBMCVideoView* CJNIXBMCVideoView::createVideoView(CJNISurfaceHolderCallback*
   std::replace(slashClassName.begin(), slashClassName.end(), '.', '/');
   std::string signature = "()L" + slashClassName + ";";
 
-  jhobject o = call_static_method<jhobject>(xbmc_jnienv(), jhclass(m_jclass),
-    "createVideoView", signature.c_str());
-  if (!o)
+  CJNIXBMCVideoView* pvw = new CJNIXBMCVideoView(call_static_method<jhobject>(xbmc_jnienv(), jhclass(m_jclass),
+                                                                              "createVideoView", signature.c_str()));
+  if (!*pvw)
   {
     CLog::Log(LOGERROR, "Cannot instantiate VideoView!!");
+    delete pvw;
     return nullptr;
   }
 
-  CJNIXBMCVideoView*pvw = new CJNIXBMCVideoView(o);
   s_videoview_map.push_back(std::pair<jhobject, CJNIXBMCVideoView*>(pvw->get_raw(), pvw));
   pvw->m_callback = callback;
   pvw->m_surfaceCreated = new CEvent;
